@@ -17,7 +17,7 @@ public class motionTest : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Alpha1))
         {
-            anim.SetBool("Isidle",false);
+            anim.SetBool("IsIdle",false);
             anim.SetTrigger("walk");
             isTriggered = true;
         }
@@ -56,7 +56,7 @@ public class motionTest : MonoBehaviour
         // どのキーも押されていないときだけ idle
         if (!isTriggered)
         {
-            anim.SetBool("Isidle",true);
+            anim.SetBool("IsIdle",true);
         }
     }
 }
