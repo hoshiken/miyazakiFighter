@@ -85,7 +85,7 @@ public class playerMove : MonoBehaviour
 
         // 横移動
         velocity.x = horizontalInput * moveSpeed;
-        Debug.Log("aaaa");
+        //Debug.Log("aaaa");
 
         // ジャンプ処理
         if (jumpPressed)
@@ -93,7 +93,6 @@ public class playerMove : MonoBehaviour
             velocity.y = jumpForce;
             jumpPressed = false;
         }
-
         rb.velocity = velocity;
     }
 
