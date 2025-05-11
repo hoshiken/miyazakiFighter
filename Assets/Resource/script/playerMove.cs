@@ -1,9 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D.IK;
+using Photon.Pun;
 
-public class playerMove : MonoBehaviour
+public class playerMove : MonoBehaviourPun
 {
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float jumpForce = 5f;
@@ -21,9 +21,16 @@ public class playerMove : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         var ikManager = GetComponent<IKManager2D>();
 
+        // 操作対象が自分のプレイヤーでなければ物理演算停止
+        if (!photonView.IsMine)
+        {
+            rb.simulated = false;
+            enabled = false;
+            return;
+        }
+
         anim.enabled = false;
         rb.simulated = false;
-
         if (ikManager != null)
         {
             ikManager.weight = 0f;
@@ -33,7 +40,6 @@ public class playerMove : MonoBehaviour
 
         anim.enabled = true;
         rb.simulated = true;
-
         if (ikManager != null)
         {
             ikManager.weight = 1f;
@@ -42,9 +48,11 @@ public class playerMove : MonoBehaviour
 
     void Update()
     {
+        // 自分のプレイヤーのみ操作
+        if (!photonView.IsMine) return;
+
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
-        // アニメーション制御
         if (horizontalInput > 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
@@ -60,7 +68,6 @@ public class playerMove : MonoBehaviour
             if (isGrounded) anim.SetTrigger("idle");
         }
 
-        // ジャンプ入力
         if (Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
             anim.SetTrigger("jump");
@@ -68,7 +75,6 @@ public class playerMove : MonoBehaviour
             isGrounded = false;
         }
 
-        // しゃがみ
         if (Input.GetKeyDown(KeyCode.S) && isGrounded)
         {
             anim.SetTrigger("sneak");
@@ -81,23 +87,24 @@ public class playerMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!photonView.IsMine) return;
+
         Vector2 velocity = rb.velocity;
-
-        // 横移動
         velocity.x = horizontalInput * moveSpeed;
-        //Debug.Log("aaaa");
 
-        // ジャンプ処理
         if (jumpPressed)
         {
             velocity.y = jumpForce;
             jumpPressed = false;
         }
+
         rb.velocity = velocity;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!photonView.IsMine) return;
+
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
