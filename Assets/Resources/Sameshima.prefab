@@ -1236,6 +1236,7 @@ GameObject:
   - component: {fileID: 4753110683163472000}
   - component: {fileID: -7443676905245083198}
   - component: {fileID: -1098211525849151578}
+  - component: {fileID: 373476640655714767}
   m_Layer: 0
   m_Name: Sameshima
   m_TagString: Untagged
@@ -1252,7 +1253,7 @@ Transform:
   m_GameObject: {fileID: 4534181953285993333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: -7, z: 0}
+  m_LocalPosition: {x: -7, y: -6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1293,7 +1294,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 5f60ad05931b04843a64c8b281bfeb54, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -1347,6 +1348,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 35
+  groundCheckDistance: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   startPosition: {x: -7, y: -7, z: 0}
   anim: {fileID: 8051691740858867427}
   networkRigidbody: {fileID: -1098211525849151578}
@@ -1361,7 +1366,7 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 1
+  m_UseAutoMass: 0
   m_Mass: 14.217296
   m_LinearDrag: 0
   m_AngularDrag: 0
@@ -1442,6 +1447,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 6862995968874595584}
   - {fileID: -1098211525849151578}
+  - {fileID: 373476640655714767}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &-1098211525849151578
 MonoBehaviour:
@@ -1455,6 +1461,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82fc493bdd396d4d9e32f6201ee42b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &373476640655714767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4534181953285993333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 8051691740858867427}
+  ApplyTiming: 2
+  SyncSettings: 79
+  StateHashes: 0000000015b524dc47ef5bf5557a918d0720eea4cc1312af4e5c5e2a1606b3a7445ccc8eb5b624dff61817dc5870e12cda3fada9e403f02ba7adc32805dfd51e5785aa37
+  TriggerHashes: 0000000015b524dc557a918dcf06334b033fe3771606b3a7cc1312af5870e12c05dfd51e
+  TotalWords: 2
 --- !u!1 &4622938941804886807
 GameObject:
   m_ObjectHideFlags: 0

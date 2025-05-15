@@ -14,6 +14,8 @@ public class PlayerMove : NetworkBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float groundCheckDistance = 0.2f;
+    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Vector3 startPosition = new Vector3(0f, 1f, 0f);
 
     [Header("Components")]
@@ -57,15 +59,30 @@ public class PlayerMove : NetworkBehaviour
     {
         if (!HasStateAuthority) return;
 
+        CheckGroundStatus(); // 接地判定を更新
         ProcessInput();
         ApplyMovement();
         UpdateAnimation();
+    }
+
+    private void CheckGroundStatus()
+    {
+        // 地面との接触をRaycastで確認
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            Vector2.down,
+            groundCheckDistance,
+            groundLayer
+        );
+
+        isGrounded = hit.collider != null;
     }
 
     private void ProcessInput()
     {
         if (GetInput(out NetworkInputData input))
         {
+            Debug.Log("Horizontal Input: " + input.moveDirection.x);
             horizontalInput = input.moveDirection.x;
 
             if (horizontalInput > 0)
@@ -100,24 +117,29 @@ public class PlayerMove : NetworkBehaviour
     }
 
     private void UpdateAnimation()
+{
+    if (GetInput(out NetworkInputData input))
     {
-        if (!isGrounded)
+        anim.SetBool("IsIdle", false);
+        if (input.buttons.IsSet((int)InputButtons.Jump))
         {
             anim.SetTrigger("jump");
         }
-        else if (isSneaking)
+        else if (input.buttons.IsSet((int)InputButtons.Sneak))
         {
             anim.SetTrigger("sneak");
         }
-        else if (Mathf.Abs(horizontalInput) > 0.1f)
+        else if (Mathf.Abs(input.moveDirection.x) > 0.1f)
         {
-            anim.SetTrigger("walk");
+            anim.SetBool("IsWalk",true);
         }
         else
         {
-            anim.SetTrigger("idle");
+            anim.SetBool("IsIdle", true);
+            anim.SetBool("IsWalk",false);
         }
     }
+}
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -128,12 +150,11 @@ public class PlayerMove : NetworkBehaviour
             isGrounded = true;
         }
     }
-}
 
-// 入力構造体（Fusionで使う）
-public struct NetworkInputData : INetworkInput
-{
-    public Vector2 moveDirection;
-    public NetworkButtons buttons;
+    private void OnDrawGizmosSelected()
+    {
+        // 接地判定の可視化
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+    }
 }
-

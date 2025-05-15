@@ -13,6 +13,7 @@ public class GameLauncher : MonoBehaviour, INetworkRunnerCallbacks
     private async void Start()
     {
         var networkRunner = Instantiate(networkRunnerPrefab);
+        networkRunner.ProvideInput = true;
         networkRunner.AddCallbacks(this);
 
         var result = await networkRunner.StartGame(new StartGameArgs
@@ -38,20 +39,14 @@ public class GameLauncher : MonoBehaviour, INetworkRunnerCallbacks
 
     void INetworkRunnerCallbacks.OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
 
-    void INetworkRunnerCallbacks.OnInput(NetworkRunner runner, NetworkInput input)
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+{
+    NetworkInputData data = new NetworkInputData
     {
-    var data = new NetworkInputData
-    {
-        moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), 0),
-        buttons = new NetworkButtons()
+        moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), 0)
     };
-
-    // 修正後の入力処理
-    if (Input.GetKey(KeyCode.W)) data.buttons.Set((int)PlayerMove.InputButtons.Jump, true);
-    if (Input.GetKey(KeyCode.S)) data.buttons.Set((int)PlayerMove.InputButtons.Sneak, true);
-
-    input.Set(data);
-    }
+    input.Set<NetworkInputData>(data); // 必ず型引数 <NetworkInputData> を付ける
+}
 
     void INetworkRunnerCallbacks.OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     void INetworkRunnerCallbacks.OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
