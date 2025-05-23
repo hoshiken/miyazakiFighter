@@ -1352,7 +1352,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
-  startPosition: {x: -7, y: -7, z: 0}
+  startPosition: {x: -7, y: -6, z: 0}
   anim: {fileID: 8051691740858867427}
   networkRigidbody: {fileID: -1098211525849151578}
 --- !u!50 &2700291158230618767

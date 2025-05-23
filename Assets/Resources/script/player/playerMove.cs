@@ -82,7 +82,7 @@ public class PlayerMove : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData input))
         {
-            Debug.Log("Horizontal Input: " + input.moveDirection.x);
+            //Debug.Log("Horizontal Input: " + input.moveDirection.x);
             horizontalInput = input.moveDirection.x;
 
             if (horizontalInput > 0)
