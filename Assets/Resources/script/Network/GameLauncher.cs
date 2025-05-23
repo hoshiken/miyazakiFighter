@@ -24,30 +24,40 @@ public class GameLauncher : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    void INetworkRunnerCallbacks.OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-    void INetworkRunnerCallbacks.OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-
     void INetworkRunnerCallbacks.OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Vector2 spawnPosition = spawnObj.transform.position;
-
-        if (player == runner.LocalPlayer)
+        NetworkObject playerObj;
+        if (runner.LocalPlayer == player)
         {
-            runner.Spawn(playerAvatarPrefab, spawnPosition, Quaternion.identity, player);
+            // 1P（自分）
+            Vector3 spawnPos = new Vector3(-7f, -7f, 0f);
+            playerObj = runner.Spawn(playerAvatarPrefab, spawnPos, Quaternion.identity, player);
+        }
+        else
+        {
+            // 2P（他プレイヤー）
+            Vector3 spawnPos = new Vector3(7f, -7f, 0f);
+            playerObj = runner.Spawn(playerAvatarPrefab, spawnPos, Quaternion.identity, player);
+
+            // 左右反転
+            playerObj.transform.localScale = new Vector3(-1f, 1f, 1f);
         }
     }
 
     void INetworkRunnerCallbacks.OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
-{
-    NetworkInputData data = new NetworkInputData
     {
-        moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), 0)
-    };
-    input.Set<NetworkInputData>(data); // 必ず型引数 <NetworkInputData> を付ける
-}
+        NetworkInputData data = new NetworkInputData
+        {
+            moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), 0)
+        };
+        input.Set<NetworkInputData>(data); // 必ず型引数 <NetworkInputData> を付ける
+    }
 
+    // その他コールバック（空実装）
+    void INetworkRunnerCallbacks.OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+    void INetworkRunnerCallbacks.OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
     void INetworkRunnerCallbacks.OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     void INetworkRunnerCallbacks.OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     void INetworkRunnerCallbacks.OnConnectedToServer(NetworkRunner runner) { }
