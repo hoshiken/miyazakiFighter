@@ -1,20 +1,28 @@
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
 public class OnlineSetting : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private TextMeshProUGUI playerCountText;
+
     private GameObject player;
     private Vector3 position;
+    private const string gameVersion = "1.0";
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        Connect("1.0");
+        DontDestroyOnLoad(gameObject);
     }
 
-    private void Connect(string gameVersion)
+    void Start()
+    {
+        ConnectToPhoton();
+        InvokeRepeating(nameof(UpdatePlayerCountUI), 1f, 1f);
+    }
+
+    private void ConnectToPhoton()
     {
         if (!PhotonNetwork.IsConnected)
         {
@@ -23,52 +31,44 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
         }
     }
 
-    /*
-     * Callbacks
-     */
-    
-    // Photonに接続
-    public override void OnConnected()
+    private void UpdatePlayerCountUI()
     {
-        Debug.Log("OnConnected");
+        if (playerCountText != null)
+        {
+            int playerCount = PhotonNetwork.CountOfPlayers;
+            playerCountText.text = $"{playerCount}人 / 20人";
+        }
     }
+    // ========= Callbacks ==========
 
-    // Photonから切断された時
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        Debug.Log("OnDisconnected: " + cause.ToString());
-    }
-
-    // マスターサーバーに接続した時
     public override void OnConnectedToMaster()
     {
-        Debug.Log("OnConnectedToMaster");
-        PhotonNetwork.JoinRandomRoom();
+        Debug.Log("Connected to Master");
+        PhotonNetwork.JoinLobby(); // ロビーに入室
     }
 
-    // ランダムな部屋への入室に失敗した時
-    public override void OnJoinRandomFailed(short returnCode, string message)
+    public override void OnJoinedLobby()
     {
-        Debug.Log("OnJoinRandomFailed: " + message);
-
-        RoomOptions roomOptions = new RoomOptions
-        {
-            MaxPlayers = 2
-        };
-
-        PhotonNetwork.CreateRoom(null, roomOptions);
+        Debug.Log("ロビーに入りました");
+        // UI上で部屋ボタンを有効化するなどの処理
+        // 例: UIManager.Instance.ShowRoomButtons();
     }
 
-    // 部屋に入室した時
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.Log("切断されました: " + cause.ToString());
+    }
+
     public override void OnJoinedRoom()
     {
-        Debug.Log("OnJoinedRoom");
+        Debug.Log("部屋に入りました: " + PhotonNetwork.CurrentRoom.Name);
 
         if (PhotonNetwork.IsMasterClient)
         {
             position = new Vector3(-5f, 0f, 0f);
             player = PhotonNetwork.Instantiate("MasterPlayer", position, Quaternion.identity);
 
+            // 左向きに反転
             Vector3 scale = player.transform.localScale;
             scale = new Vector3(-scale.x, scale.y, scale.z);
             player.transform.localScale = scale;
@@ -77,6 +77,44 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
         {
             position = new Vector3(5f, 0f, 0f);
             player = PhotonNetwork.Instantiate("ClientPlayer", position, Quaternion.identity);
+        }
+    }
+
+    public override void OnLeftRoom()
+    {
+        Debug.Log("部屋を退出しました");
+        PhotonNetwork.JoinLobby();
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("部屋の作成に失敗: " + message);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("部屋への入室に失敗: " + message);
+    }
+
+    // ========= 外部UIから呼び出す用のメソッド ==========
+
+    public void JoinBattleRoom(string roomName)
+    {
+        RoomOptions options = new RoomOptions
+        {
+            MaxPlayers = 2,
+            IsVisible = true,
+            IsOpen = true
+        };
+
+        PhotonNetwork.JoinOrCreateRoom(roomName, options, TypedLobby.Default);
+    }
+
+    public void LeaveCurrentRoom()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
         }
     }
 }
