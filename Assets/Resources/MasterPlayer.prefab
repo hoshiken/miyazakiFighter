@@ -1231,7 +1231,6 @@ GameObject:
   - component: {fileID: 2231031946886616333}
   - component: {fileID: 8051691740858867427}
   - component: {fileID: 3004554414915300244}
-  - component: {fileID: 6067546956969127020}
   - component: {fileID: 6862995968874595584}
   - component: {fileID: 2700291158230618767}
   - component: {fileID: 4753110683163472000}
@@ -1334,18 +1333,6 @@ MonoBehaviour:
     showGizmo: 1
   - color: {r: 0, g: 1, b: 0, a: 1}
     showGizmo: 1
---- !u!114 &6067546956969127020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4534181953285993333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b847bc7a934a093439b13fde88275490, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6862995968874595584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1453,6 +1440,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 6862995968874595584}
   - {fileID: 9177188630720992692}
   sceneViewId: 0
   InstantiationId: 0
