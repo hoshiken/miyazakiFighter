@@ -70,3 +70,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/Resources/images/UI/Fonts/Kaisei_Decol,M_PLUS_Rounded_1c,Sawarabi_Gothic,Shippori_Mincho,Yuji_Syuku,etc/Yuji_Syuku/YujiSyuku-Regular SDF.asset
+Assets/Resources/images/UI/Fonts/Kaisei_Decol,M_PLUS_Rounded_1c,Sawarabi_Gothic,Shippori_Mincho,Yuji_Syuku,etc/Yuji_Syuku/YujiSyuku-Regular SDF.asset.meta
+Assets/TextMesh Pro/Fonts/Kaisei_Decol,M_PLUS_Rounded_1c,Sawarabi_Gothic,Shippori_Mincho,Yuji_Boku,etc.zip
+Assets/TextMesh Pro/Fonts/Kaisei_Decol,M_PLUS_Rounded_1c,Sawarabi_Gothic,Shippori_Mincho,Yuji_Boku,etc.zip.meta
