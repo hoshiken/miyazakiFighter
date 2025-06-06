@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -11,12 +10,10 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
     private GameObject player;
     private Vector3 position;
     private const string gameVersion = "1.0";
-    private string currentRoomName;
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        PhotonNetwork.AutomaticallySyncScene = true; // シーンの自動同期を有効化
     }
 
     void Start()
@@ -36,14 +33,12 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
 
     private void UpdatePlayerCountUI()
     {
-        // ロビーUIに playerCountText が存在している時のみ更新
-        if (playerCountText != null && PhotonNetwork.InLobby)
+        if (playerCountText != null)
         {
             int playerCount = PhotonNetwork.CountOfPlayers;
             playerCountText.text = $"{playerCount}人 / 20人";
         }
     }
-
     // ========= Callbacks ==========
 
     public override void OnConnectedToMaster()
@@ -55,6 +50,8 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("ロビーに入りました");
+        // UI上で部屋ボタンを有効化するなどの処理
+        // 例: UIManager.Instance.ShowRoomButtons();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -66,13 +63,21 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
     {
         Debug.Log("部屋に入りました: " + PhotonNetwork.CurrentRoom.Name);
 
-        // シーンがまだ切り替わってない場合はここでロード
-        if (SceneManager.GetActiveScene().name != "BattleScene")
+        if (PhotonNetwork.IsMasterClient)
         {
-            SceneManager.LoadScene("BattleScene");
-        }
+            position = new Vector3(-5f, 0f, 0f);
+            player = PhotonNetwork.Instantiate("MasterPlayer", position, Quaternion.identity);
 
-        // プレイヤー生成は OnSceneLoaded で行う
+            // 左向きに反転
+            Vector3 scale = player.transform.localScale;
+            scale = new Vector3(-scale.x, scale.y, scale.z);
+            player.transform.localScale = scale;
+        }
+        else
+        {
+            position = new Vector3(5f, 0f, 0f);
+            player = PhotonNetwork.Instantiate("ClientPlayer", position, Quaternion.identity);
+        }
     }
 
     public override void OnLeftRoom()
@@ -95,8 +100,6 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
 
     public void JoinBattleRoom(string roomName)
     {
-        currentRoomName = roomName;
-
         RoomOptions options = new RoomOptions
         {
             MaxPlayers = 2,
@@ -112,43 +115,6 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom();
-        }
-    }
-
-    // ========= プレイヤー生成をシーン読み込み後に =========
-    void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "BattleScene" && PhotonNetwork.InRoom)
-        {
-            SpawnPlayer();
-        }
-    }
-
-    private void SpawnPlayer()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            position = new Vector3(-5f, 0f, 0f);
-            player = PhotonNetwork.Instantiate("MasterPlayer", position, Quaternion.identity);
-
-            Vector3 scale = player.transform.localScale;
-            scale = new Vector3(-scale.x, scale.y, scale.z);
-            player.transform.localScale = scale;
-        }
-        else
-        {
-            position = new Vector3(5f, 0f, 0f);
-            player = PhotonNetwork.Instantiate("ClientPlayer", position, Quaternion.identity);
         }
     }
 }
