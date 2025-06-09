@@ -68,15 +68,15 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
             position = new Vector3(-5f, 0f, 0f);
             player = PhotonNetwork.Instantiate("MasterPlayer", position, Quaternion.identity);
 
-            // 左向きに反転
-            Vector3 scale = player.transform.localScale;
-            scale = new Vector3(-scale.x, scale.y, scale.z);
-            player.transform.localScale = scale;
         }
         else
         {
             position = new Vector3(5f, 0f, 0f);
             player = PhotonNetwork.Instantiate("ClientPlayer", position, Quaternion.identity);
+            // 左向きに反転
+            Vector3 scale = player.transform.localScale;
+            scale = new Vector3(-scale.x, scale.y, scale.z);
+            player.transform.localScale = scale;
         }
     }
 

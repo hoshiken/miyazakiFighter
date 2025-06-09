@@ -35,7 +35,7 @@ public class RoomInfoDisplay : MonoBehaviourPunCallbacks
             }
             else
             {
-                roomTexts[i].text = "0/2人";
+                roomTexts[i].text = "0人/2人";
             }
         }
     }
