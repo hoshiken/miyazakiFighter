@@ -1,43 +1,43 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
-public class RoomPlayerSpawner : MonoBehaviour
+public class RoomPlayerSpawner : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private Vector3 masterSpawnPos = new Vector3(-5f, 0f, 0f);
+    [SerializeField] private Vector3 clientSpawnPos = new Vector3(5f, 0f, 0f);
+
+    private bool hasSpawned = false;
+
     private void Start()
     {
-        SpawnPlayer();
+        // 対戦シーンでのみスポーン処理
+        if (PhotonNetwork.InRoom && SceneManager.GetActiveScene().name.StartsWith("Room"))
+        {
+            SpawnPlayerIfNeeded();
+        }
     }
 
-    private void SpawnPlayer()
+    void SpawnPlayerIfNeeded()
     {
-        if (!PhotonNetwork.InRoom)
-        {
-            Debug.LogWarning("Not in a Photon room. Cannot spawn player.");
-            return;
-        }
+        if (hasSpawned) return;
 
-        Vector3 spawnPos;
-        string prefabName;
-
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.LocalPlayer.TagObject == null)
         {
-            spawnPos = new Vector3(-5f, 0f, 0f);
-            prefabName = "MasterPlayer";
-        }
-        else
-        {
-            spawnPos = new Vector3(5f, 0f, 0f);
-            prefabName = "ClientPlayer";
-        }
+            Vector3 spawnPos = PhotonNetwork.IsMasterClient ? masterSpawnPos : clientSpawnPos;
+            GameObject spawnedPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPos, Quaternion.identity);
+            PhotonNetwork.LocalPlayer.TagObject = spawnedPlayer;
 
-        GameObject player = PhotonNetwork.Instantiate(prefabName, spawnPos, Quaternion.identity);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Vector3 scale = spawnedPlayer.transform.localScale;
+                scale.x *= -1f;
+                spawnedPlayer.transform.localScale = scale;
+            }
 
-        // マスターのスケール反転（オプション）
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Vector3 scale = player.transform.localScale;
-            scale.x *= -1f;
-            player.transform.localScale = scale;
+            hasSpawned = true;
         }
     }
 }

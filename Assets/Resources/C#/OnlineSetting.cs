@@ -60,25 +60,15 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
     }
 
     public override void OnJoinedRoom()
-    {
-        Debug.Log("部屋に入りました: " + PhotonNetwork.CurrentRoom.Name);
+{
+    Debug.Log("部屋に入りました: " + PhotonNetwork.CurrentRoom.Name);
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            position = new Vector3(-5f, 0f, 0f);
-            player = PhotonNetwork.Instantiate("MasterPlayer", position, Quaternion.identity);
+    // 対戦用シーンへ遷移（Room1～Room10）前提
+    if (!PhotonNetwork.CurrentRoom.Name.StartsWith("Room"))
+        return;
 
-        }
-        else
-        {
-            position = new Vector3(5f, 0f, 0f);
-            player = PhotonNetwork.Instantiate("ClientPlayer", position, Quaternion.identity);
-            // 左向きに反転
-            Vector3 scale = player.transform.localScale;
-            scale = new Vector3(-scale.x, scale.y, scale.z);
-            player.transform.localScale = scale;
-        }
-    }
+    UnityEngine.SceneManagement.SceneManager.LoadScene(PhotonNetwork.CurrentRoom.Name);
+}
 
     public override void OnLeftRoom()
     {
