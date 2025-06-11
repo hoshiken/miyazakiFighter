@@ -538,9 +538,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8589d75dc24249b44a6d8809f5bb0945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 4534181953285993333, guid: 801206b025efdec41a752830bc885a62, type: 3}
-  masterSpawnPos: {x: -5, y: 0, z: 0}
-  clientSpawnPos: {x: 5, y: 0, z: 0}
+  charPrefabs:
+  - name: Sameshima
+    prefab: {fileID: 4534181953285993333, guid: 801206b025efdec41a752830bc885a62, type: 3}
+  defaultMasterPos: {x: -5, y: 0, z: 0}
+  defaultClientPos: {x: 5, y: 0, z: 0}
 --- !u!4 &1236273018
 Transform:
   m_ObjectHideFlags: 0

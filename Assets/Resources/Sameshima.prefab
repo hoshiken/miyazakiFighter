@@ -1237,7 +1237,7 @@ GameObject:
   - component: {fileID: 6296144835348276375}
   - component: {fileID: 9177188630720992692}
   m_Layer: 0
-  m_Name: MasterPlayer
+  m_Name: Sameshima
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

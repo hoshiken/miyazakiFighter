@@ -1,43 +1,40 @@
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class RoomPlayerSpawner : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private Vector3 masterSpawnPos = new Vector3(-5f, 0f, 0f);
-    [SerializeField] private Vector3 clientSpawnPos = new Vector3(5f, 0f, 0f);
-
-    private bool hasSpawned = false;
-
-    private void Start()
+    [System.Serializable]
+    public class CharPrefabEntry
     {
-        // 対戦シーンでのみスポーン処理
-        if (PhotonNetwork.InRoom && SceneManager.GetActiveScene().name.StartsWith("Room"))
-        {
-            SpawnPlayerIfNeeded();
-        }
+        public string name;
+        public GameObject prefab;
     }
+    public List<CharPrefabEntry> charPrefabs;
 
-    void SpawnPlayerIfNeeded()
+    public Vector3 defaultMasterPos = new Vector3(-5,0,0);
+    public Vector3 defaultClientPos = new Vector3(5,0,0);
+
+    private bool hasSpawned;
+
+    void Start()
     {
-        if (hasSpawned) return;
+        if (!PhotonNetwork.InRoom || hasSpawned) return;
 
-        if (PhotonNetwork.LocalPlayer.TagObject == null)
+        var props = PhotonNetwork.LocalPlayer.CustomProperties;
+        string charName = props.ContainsKey("SelectedCharacter") ? props["SelectedCharacter"].ToString() : "Default";
+
+        var entry = charPrefabs.Find(e => e.name == charName);
+        if (entry == null) Debug.LogError($"Prefab not found for {charName}");
+
+        Vector3 spawnPos = PhotonNetwork.IsMasterClient ? defaultMasterPos : defaultClientPos;
+        var playerObj = PhotonNetwork.Instantiate(entry.prefab.name, spawnPos, Quaternion.identity);
+        if (!PhotonNetwork.IsMasterClient)
         {
-            Vector3 spawnPos = PhotonNetwork.IsMasterClient ? masterSpawnPos : clientSpawnPos;
-            GameObject spawnedPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPos, Quaternion.identity);
-            PhotonNetwork.LocalPlayer.TagObject = spawnedPlayer;
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                Vector3 scale = spawnedPlayer.transform.localScale;
-                scale.x *= -1f;
-                spawnedPlayer.transform.localScale = scale;
-            }
-
-            hasSpawned = true;
+            var s = playerObj.transform.localScale;
+            s.x *= -1f;
+            playerObj.transform.localScale = s;
         }
+        hasSpawned = true;
     }
 }

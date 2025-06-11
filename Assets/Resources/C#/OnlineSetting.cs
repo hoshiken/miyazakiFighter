@@ -7,7 +7,7 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI playerCountText;
     // Common battle scene name
-    [SerializeField] private string battleSceneName = "BattleScene"; // JoinRoom.cs と同じ名前を使用するか、共通の定数を持つスクリプトから参照する
+    [SerializeField] private string SelectSceneName = "CharacterSelect"; // JoinRoom.cs と同じ名前を使用するか、共通の定数を持つスクリプトから参照する
 
     private GameObject player; // この変数はプレイヤーの生成ロジックをRoomPlayerSpawnerに移動したため、不要になる可能性があります。
     private Vector3 position; // この変数はプレイヤーの生成ロジックをRoomPlayerSpawnerに移動したため、不要になる可能性があります。
@@ -71,8 +71,8 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // PhotonNetwork.LoadLevelを使用することで、シーンロードの同期をPhotonに任せる
-            // 'battleSceneName' に設定された共通のシーン名（例: "BattleScene"）をロード
-            PhotonNetwork.LoadLevel(battleSceneName);
+            // 'SelectSceneName' に設定された共通のシーン名（例: "BattleScene"）をロード
+            PhotonNetwork.LoadLevel(SelectSceneName);
         }
         // クライアント側はPhotonNetwork.AutomaticallySyncScene = true; の設定により、
         // マスタークライアントがシーンをロードした時点で自動的に同じシーンがロードされるため、

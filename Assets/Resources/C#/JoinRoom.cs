@@ -6,7 +6,7 @@ using Photon.Realtime;
 public class JoinRoom : MonoBehaviourPunCallbacks
 {
     [SerializeField] private string roomName; // InspectorでRoom1〜Room10を指定
-    [SerializeField] private string battleSceneName = "BattleScene"; // 実際に使う対戦シーン名
+    [SerializeField] private string battleSceneName = "CharacterSelect"; // 実際に使う対戦シーン名
 
     public void OnClickJoinRoom()
     {
