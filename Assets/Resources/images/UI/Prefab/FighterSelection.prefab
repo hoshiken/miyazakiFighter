@@ -124,8 +124,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3342859282175548359}
         m_TargetAssemblyTypeName: CharacterSelectController, Assembly-CSharp
-        m_MethodName: SelectCharacter
-        m_Mode: 5
+        m_MethodName: OnClickSelectCharacter
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd66f16c21499a4681d9b54cd51903e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: 
 --- !u!1 &4354769065938846054
 GameObject:
   m_ObjectHideFlags: 0

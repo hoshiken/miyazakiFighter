@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1033665203314847198}
   - component: {fileID: 1658950673898043943}
   - component: {fileID: 9046268693085971072}
+  - component: {fileID: 1973538608367950163}
   m_Layer: 5
   m_Name: Duel
   m_TagString: Untagged
@@ -120,7 +121,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1658950673898043943}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1973538608367950163}
+        m_TargetAssemblyTypeName: DuelStart, Assembly-CSharp
+        m_MethodName: OnClickStartBattle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1973538608367950163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363669097141800103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df0d6474c13ba5f488c7861762e0e81f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4875797590214397187
 GameObject:
   m_ObjectHideFlags: 0

@@ -709,6 +709,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3342859282175548359, guid: 8eac148db4ddcef4c9b749ef624adea5, type: 3}
+      propertyPath: characterName
+      value: Sameshima
+      objectReference: {fileID: 0}
     - target: {fileID: 4039933601363486358, guid: 8eac148db4ddcef4c9b749ef624adea5, type: 3}
       propertyPath: m_Name
       value: Fighter
