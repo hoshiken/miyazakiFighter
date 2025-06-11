@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Resources/scenes/Lobby.unity
     guid: abf8e1ff395ee1e4d8ed1c15805c787e
   - enabled: 1
+    path: Assets/Resources/scenes/CharacterSelect.unity
+    guid: 80e9a1ad4f75a084ba3ca5016f3adade
+  - enabled: 1
     path: Assets/Resources/scenes/BattleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
