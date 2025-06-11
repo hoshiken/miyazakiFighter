@@ -6,14 +6,18 @@ using Photon.Realtime;
 public class OnlineSetting : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI playerCountText;
+    // Common battle scene name
+    [SerializeField] private string battleSceneName = "BattleScene"; // JoinRoom.cs と同じ名前を使用するか、共通の定数を持つスクリプトから参照する
 
-    private GameObject player;
-    private Vector3 position;
+    private GameObject player; // この変数はプレイヤーの生成ロジックをRoomPlayerSpawnerに移動したため、不要になる可能性があります。
+    private Vector3 position; // この変数はプレイヤーの生成ロジックをRoomPlayerSpawnerに移動したため、不要になる可能性があります。
     private const string gameVersion = "1.0";
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        // シーンの自動同期を有効にする（マスタークライアントがシーンをロードすると他のクライアントも同期）
+        PhotonNetwork.AutomaticallySyncScene = true; // この行はAwakeかStartで一度だけ呼ぶのが推奨
     }
 
     void Start()
@@ -60,15 +64,24 @@ public class OnlineSetting : MonoBehaviourPunCallbacks
     }
 
     public override void OnJoinedRoom()
-{
-    Debug.Log("部屋に入りました: " + PhotonNetwork.CurrentRoom.Name);
+    {
+        Debug.Log("部屋に入りました: " + PhotonNetwork.CurrentRoom.Name);
 
-    // 対戦用シーンへ遷移（Room1～Room10）前提
-    if (!PhotonNetwork.CurrentRoom.Name.StartsWith("Room"))
-        return;
-
-    UnityEngine.SceneManagement.SceneManager.LoadScene(PhotonNetwork.CurrentRoom.Name);
-}
+        // マスタークライアントのみが共通のバトルシーンをロードし、他のクライアントは自動的に同期される
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // PhotonNetwork.LoadLevelを使用することで、シーンロードの同期をPhotonに任せる
+            // 'battleSceneName' に設定された共通のシーン名（例: "BattleScene"）をロード
+            PhotonNetwork.LoadLevel(battleSceneName);
+        }
+        // クライアント側はPhotonNetwork.AutomaticallySyncScene = true; の設定により、
+        // マスタークライアントがシーンをロードした時点で自動的に同じシーンがロードされるため、
+        // ここでクライアント側がSceneManager.LoadSceneを呼ぶ必要はありません。
+        // もしOnJoinedRoomでクライアント側もシーン遷移したい場合は、
+        // PhotonNetwork.CurrentRoom.PlayerCount == 2 といった条件で、
+        // プレイヤーが揃ったタイミングでロードを呼ぶケースもありますが、
+        // PhotonNetwork.AutomaticallySyncScene があれば不要なことが多いです。
+    }
 
     public override void OnLeftRoom()
     {
