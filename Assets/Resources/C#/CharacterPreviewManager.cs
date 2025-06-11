@@ -1,52 +1,55 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class CharacterPreviewManager : MonoBehaviourPunCallbacks
 {
-    public Transform leftSpawnPoint;   // 1P（Master）表示位置
-    public Transform rightSpawnPoint;  // 2P（非Master）表示位置
+    public Transform leftSpawnPoint;   // 1P用
+    public Transform rightSpawnPoint;  // 2P用
     public GameObject[] characterPrefabs;
 
-    private GameObject currentPreview;
+    private GameObject myPreview;
+    private GameObject otherPreview;
 
-    private string defaultCharacter = "Sameshima";
-
-    void Start()
+    public void ShowCharacterPreview(Player player, string characterName)
     {
-        // 初期選択キャラを設定
-        SetCharacter(defaultCharacter);
-    }
+        bool isLocalPlayer = player == PhotonNetwork.LocalPlayer;
+        bool isPlayer1 = player.IsMasterClient;
 
-    public void SetCharacter(string characterName)
-    {
-        // カスタムプロパティにキャラを登録
-        var hash = new Hashtable { ["SelectedCharacter"] = characterName };
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-
-        // 表示位置を判断（1P: 左, 2P: 右）
-        bool isPlayer1 = PhotonNetwork.IsMasterClient;
         Transform spawnPoint = isPlayer1 ? leftSpawnPoint : rightSpawnPoint;
+        GameObject targetPrefab = GetCharacterPrefab(characterName);
 
-        // 既存の表示を削除
-        if (currentPreview != null)
-            Destroy(currentPreview);
-
-        // プレハブを取得・生成
-        GameObject prefab = GetCharacterPrefab(characterName);
-        if (prefab != null)
+        if (targetPrefab == null)
         {
-            currentPreview = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
-            currentPreview.transform.localScale = Vector3.one * 1.5f; // サイズ調整
+            Debug.LogWarning($"キャラクタープレハブが見つかりません: {characterName}");
+            return;
+        }
+
+        // 既存を削除
+        if (isLocalPlayer)
+        {
+            if (myPreview != null) Destroy(myPreview);
         }
         else
         {
-            Debug.LogWarning($"キャラ {characterName} のプレハブが見つかりません");
+            if (otherPreview != null) Destroy(otherPreview);
         }
+
+        // 生成
+        GameObject preview = Instantiate(targetPrefab, spawnPoint.position, spawnPoint.rotation);
+        Vector3 scale = Vector3.one * 1.5f;
+        if (!isPlayer1) scale.x *= -1;  // 2Pは左右反転
+        preview.transform.localScale = scale;
+
+        if (isLocalPlayer)
+            myPreview = preview;
+        else
+            otherPreview = preview;
     }
 
-    GameObject GetCharacterPrefab(string name)
+    private GameObject GetCharacterPrefab(string name)
     {
         foreach (var prefab in characterPrefabs)
         {
@@ -56,9 +59,13 @@ public class CharacterPreviewManager : MonoBehaviourPunCallbacks
         return null;
     }
 
-    // キャラ変更時に外部から呼び出す関数
-    public void OnClickSelectCharacter(string characterName)
+    // 相手がキャラを変更した時に呼ばれる
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        SetCharacter(characterName);
+        if (changedProps.ContainsKey("SelectedCharacter"))
+        {
+            string characterName = changedProps["SelectedCharacter"].ToString();
+            ShowCharacterPreview(targetPlayer, characterName);
+        }
     }
 }

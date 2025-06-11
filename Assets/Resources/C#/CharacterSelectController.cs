@@ -1,29 +1,41 @@
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Photon.Realtime;
 using ExitGames.Client.Photon;
 
 public class CharacterSelectController : MonoBehaviourPunCallbacks
 {
-    public string characterName = "Sameshima";  // 初期値を設定
+    public string characterName = "Sameshima";
     public CharacterPreviewManager previewManager;
 
-    public void Start()
+    void Start()
     {
-        // ゲーム開始時に自動で"Sameshima"を選択
-        var hash = new Hashtable { ["SelectedCharacter"] = characterName };
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        Debug.Log($"Default selected character: {characterName}");
+        // 初期キャラを設定
+        SetSelectedCharacter(characterName);
     }
 
     public void OnClickSelectCharacter()
     {
-        var hash = new Hashtable { ["SelectedCharacter"] = characterName };
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        Debug.Log($"Selected character: {characterName}");
+        SetSelectedCharacter(characterName);
     }
-    public void OnClick()
+
+    private void SetSelectedCharacter(string name)
     {
-        previewManager.ShowCharacterPreview(characterName);
+        characterName = name;
+
+        var hash = new Hashtable { ["SelectedCharacter"] = name };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        previewManager.ShowCharacterPreview(PhotonNetwork.LocalPlayer, name);
+        Debug.Log($"選択キャラ: {name}");
+    }
+
+    // 相手が参加してきたら表示
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("SelectedCharacter", out object myChar))
+        {
+            previewManager.ShowCharacterPreview(PhotonNetwork.LocalPlayer, myChar.ToString());
+        }
     }
 }
