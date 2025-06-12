@@ -213,8 +213,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u6C7A\u95D8\u958B\u59CB"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d7c860f5bdf19240aab0a05498609a6, type: 2}
-  m_sharedMaterial: {fileID: -8101720513562967731, guid: 9d7c860f5bdf19240aab0a05498609a6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 48077b88176212047908ce851909b87e, type: 2}
+  m_sharedMaterial: {fileID: 8136038563857241124, guid: 48077b88176212047908ce851909b87e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -9,10 +9,19 @@ public class CharacterSelectController : MonoBehaviourPunCallbacks
     public CharacterPreviewManager previewManager;
 
     void Start()
+{
+    // 自分のキャラを反映
+    SetSelectedCharacter(characterName);
+
+    // 相手が既に入っているならそのキャラも表示
+    foreach (var p in PhotonNetwork.PlayerListOthers)
     {
-        // 初期キャラを設定
-        SetSelectedCharacter(characterName);
+        if (p.CustomProperties.TryGetValue("SelectedCharacter", out object charName))
+        {
+            previewManager.ShowCharacterPreview(p, charName.ToString());
+        }
     }
+}
 
     public void OnClickSelectCharacter()
     {

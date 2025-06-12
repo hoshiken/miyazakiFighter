@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: 
+  previewManager: {fileID: 0}
 --- !u!1 &4354769065938846054
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,8 +291,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u9BAB\u5CF6\u3000\u6D69"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d7c860f5bdf19240aab0a05498609a6, type: 2}
-  m_sharedMaterial: {fileID: -8101720513562967731, guid: 9d7c860f5bdf19240aab0a05498609a6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 48077b88176212047908ce851909b87e, type: 2}
+  m_sharedMaterial: {fileID: 8136038563857241124, guid: 48077b88176212047908ce851909b87e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

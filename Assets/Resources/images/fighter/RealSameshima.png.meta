@@ -156,7 +156,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RealSameshima_0: 5388607926721653640
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

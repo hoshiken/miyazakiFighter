@@ -6,47 +6,47 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class CharacterPreviewManager : MonoBehaviourPunCallbacks
 {
-    public Transform leftSpawnPoint;   // 1P用
+    public Transform leftSpawnPoint;   // 1P用（MasterClient）
     public Transform rightSpawnPoint;  // 2P用
     public GameObject[] characterPrefabs;
 
-    private GameObject myPreview;
-    private GameObject otherPreview;
+    private GameObject leftPreview;    // 1P側に表示するキャラ
+    private GameObject rightPreview;   // 2P側に表示するキャラ
 
     public void ShowCharacterPreview(Player player, string characterName)
     {
-        bool isLocalPlayer = player == PhotonNetwork.LocalPlayer;
         bool isPlayer1 = player.IsMasterClient;
-
         Transform spawnPoint = isPlayer1 ? leftSpawnPoint : rightSpawnPoint;
-        GameObject targetPrefab = GetCharacterPrefab(characterName);
 
+        GameObject targetPrefab = GetCharacterPrefab(characterName);
         if (targetPrefab == null)
         {
             Debug.LogWarning($"キャラクタープレハブが見つかりません: {characterName}");
             return;
         }
 
-        // 既存を削除
-        if (isLocalPlayer)
+        // 表示済みのキャラを削除
+        if (isPlayer1)
         {
-            if (myPreview != null) Destroy(myPreview);
+            if (leftPreview != null) Destroy(leftPreview);
         }
         else
         {
-            if (otherPreview != null) Destroy(otherPreview);
+            if (rightPreview != null) Destroy(rightPreview);
         }
 
-        // 生成
+        // キャラ生成
         GameObject preview = Instantiate(targetPrefab, spawnPoint.position, spawnPoint.rotation);
         Vector3 scale = Vector3.one * 1.5f;
-        if (!isPlayer1) scale.x *= -1;  // 2Pは左右反転
+
+        // 右側のキャラだけ左右反転（見た目調整）
+        if (!isPlayer1) scale.x *= -1;
         preview.transform.localScale = scale;
 
-        if (isLocalPlayer)
-            myPreview = preview;
+        if (isPlayer1)
+            leftPreview = preview;
         else
-            otherPreview = preview;
+            rightPreview = preview;
     }
 
     private GameObject GetCharacterPrefab(string name)
@@ -59,7 +59,7 @@ public class CharacterPreviewManager : MonoBehaviourPunCallbacks
         return null;
     }
 
-    // 相手がキャラを変更した時に呼ばれる
+    // 相手がキャラ変更したら呼ばれる
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         if (changedProps.ContainsKey("SelectedCharacter"))
