@@ -9,19 +9,19 @@ public class CharacterSelectController : MonoBehaviourPunCallbacks
     public CharacterPreviewManager previewManager;
 
     void Start()
-{
-    // 自分のキャラを反映
-    SetSelectedCharacter(characterName);
-
-    // 相手が既に入っているならそのキャラも表示
-    foreach (var p in PhotonNetwork.PlayerListOthers)
     {
-        if (p.CustomProperties.TryGetValue("SelectedCharacter", out object charName))
+        // 自分のキャラを反映
+        SetSelectedCharacter(characterName);
+
+        // 相手が既に入っているならそのキャラも表示
+        foreach (var p in PhotonNetwork.PlayerListOthers)
         {
-            previewManager.ShowCharacterPreview(p, charName.ToString());
+            if (p.CustomProperties.TryGetValue("SelectedCharacter", out object charName))
+            {
+                previewManager.ShowCharacterPreview(p, charName.ToString());
+            }
         }
     }
-}
 
     public void OnClickSelectCharacter()
     {
@@ -42,9 +42,10 @@ public class CharacterSelectController : MonoBehaviourPunCallbacks
     // 相手が参加してきたら表示
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("SelectedCharacter", out object myChar))
+        // 新しく入ってきたプレイヤーのプロパティを確認
+        if (newPlayer.CustomProperties.TryGetValue("SelectedCharacter", out object selectedChar))
         {
-            previewManager.ShowCharacterPreview(PhotonNetwork.LocalPlayer, myChar.ToString());
+            previewManager.ShowCharacterPreview(newPlayer, selectedChar.ToString());
         }
     }
 }
