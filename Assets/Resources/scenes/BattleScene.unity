@@ -540,7 +540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charPrefabs:
   - name: Sameshima
-    prefab: {fileID: 4534181953285993333, guid: 801206b025efdec41a752830bc885a62, type: 3}
+    prefab: {fileID: 797805753286134093, guid: 801206b025efdec41a752830bc885a62, type: 3}
   defaultMasterPos: {x: -5, y: 0, z: 0}
   defaultClientPos: {x: 5, y: 0, z: 0}
 --- !u!4 &1236273018

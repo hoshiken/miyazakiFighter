@@ -446,7 +446,7 @@ MonoBehaviour:
   leftSpawnPoint: {fileID: 437673984}
   rightSpawnPoint: {fileID: 839936849}
   characterPrefabs:
-  - {fileID: 4534181953285993333, guid: 801206b025efdec41a752830bc885a62, type: 3}
+  - {fileID: 797805753286134093, guid: 801206b025efdec41a752830bc885a62, type: 3}
 --- !u!4 &518916372
 Transform:
   m_ObjectHideFlags: 0
