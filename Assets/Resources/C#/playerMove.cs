@@ -18,36 +18,36 @@ public class playerMove : MonoBehaviourPun, IPunObservable
     private string currentTrigger = "";
 
     void Start()
-{
-    anim = GetComponent<Animator>();
-    rb = GetComponent<Rigidbody2D>();
-    var ikManager = GetComponent<IKManager2D>();
-
-    if (!photonView.IsMine)
     {
-        rb.simulated = false;
-        return;
+        anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        var ikManager = GetComponent<IKManager2D>();
+
+        if (!photonView.IsMine)
+        {
+            rb.simulated = false;
+            return;
+        }
+
+        // 不要な有効無効の切り替えは削除
+        if (ikManager != null) ikManager.weight = 1f;
+
+        transform.position = startPosition;
+        rb.simulated = true;
     }
 
-    // 不要な有効無効の切り替えは削除
-    if (ikManager != null) ikManager.weight = 1f;
-
-    transform.position = startPosition;
-    rb.simulated = true;
-}
-
-[PunRPC]
-void TriggerAnimRPC(string trigger)
-{
-    if (anim != null)
+    [PunRPC]
+    void TriggerAnimRPC(string trigger)
     {
-        anim.SetTrigger(trigger);
+        if (anim != null)
+        {
+            anim.SetTrigger(trigger);
+        }
+        else
+        {
+            Debug.LogWarning($"Animator is null when trying to set trigger: {trigger}");
+        }
     }
-    else
-    {
-        Debug.LogWarning($"Animator is null when trying to set trigger: {trigger}");
-    }
-}
 
 
     void Update()
@@ -133,4 +133,12 @@ void TriggerAnimRPC(string trigger)
     {
         // 今回はRPCだけで同期するので何も書かなくてもOK
     }
+    [PunRPC]
+    public void SetFacingDirection(float direction)
+    {
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * Mathf.Sign(direction);
+        transform.localScale = scale;
+    }
+
 }
