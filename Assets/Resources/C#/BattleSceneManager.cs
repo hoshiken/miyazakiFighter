@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BattleSceneManager : MonoBehaviourPunCallbacks
 {
-    void Start()
+    void Awake()
     {
         if (!PhotonNetwork.IsMasterClient) return; // 同期処理はマスターだけが行う
 

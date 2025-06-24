@@ -6,7 +6,7 @@ public class playerMove : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float jumpForce = 5f;
-    [SerializeField] Vector3 startPosition = new Vector3(0f, 1f, 0f);
+    //[SerializeField] Vector3 startPosition = new Vector3(0f, 1f, 0f);
     private Animator anim = null;
     private Rigidbody2D rb = null;
     private bool isGrounded = true;
@@ -32,7 +32,7 @@ public class playerMove : MonoBehaviourPun, IPunObservable
         // 不要な有効無効の切り替えは削除
         if (ikManager != null) ikManager.weight = 1f;
 
-        transform.position = startPosition;
+        //transform.position = startPosition;
         rb.simulated = true;
     }
 

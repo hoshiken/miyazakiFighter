@@ -492,6 +492,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sameshima
       objectReference: {fileID: 0}
+    - target: {fileID: -8653719598885068355, guid: bb3c9d66633bde346be5b238bc1ca95a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: -7671836262276332213, guid: bb3c9d66633bde346be5b238bc1ca95a, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.99969625
@@ -817,7 +821,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 35
-  startPosition: {x: -7, y: -7, z: 0}
 --- !u!50 &2700291158230618767
 Rigidbody2D:
   serializedVersion: 4
