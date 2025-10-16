@@ -5,7 +5,7 @@ using ExitGames.Client.Photon;
 
 public class CharacterSelectController : MonoBehaviourPunCallbacks
 {
-    public string characterName = "Sameshima";
+    public string characterName = "SameshimaHiroshi";
     public CharacterPreviewManager previewManager;
 
     void Start()
@@ -23,7 +23,7 @@ public class CharacterSelectController : MonoBehaviourPunCallbacks
         else
         {
             // まだプロパティ未設定なら仮でSameshima表示
-            previewManager.ShowCharacterPreview(p, "Sameshima");
+            previewManager.ShowCharacterPreview(p, "SameshimaHiroshi");
         }
     }
 }
@@ -57,7 +57,7 @@ public class CharacterSelectController : MonoBehaviourPunCallbacks
     else
     {
         // 万が一まだプロパティが設定されていない場合、初期値として"Sameshima"を設定しておく
-        var hash = new ExitGames.Client.Photon.Hashtable { ["SelectedCharacter"] = "Sameshima" };
+        var hash = new ExitGames.Client.Photon.Hashtable { ["SelectedCharacter"] = "SameshimaHiroshi" };
         newPlayer.SetCustomProperties(hash); // これ自体は他人には効かないが、デバッグ用
     }
 }

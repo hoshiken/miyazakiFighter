@@ -6,16 +6,13 @@ public class playerMove : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float jumpForce = 5f;
-    //[SerializeField] Vector3 startPosition = new Vector3(0f, 1f, 0f);
     private Animator anim = null;
     private Rigidbody2D rb = null;
     private bool isGrounded = true;
 
     private float horizontalInput = 0f;
     private bool jumpPressed = false;
-
-    private Vector3 networkScale;
-    private string currentTrigger = "";
+    private bool isSneaking = false;
 
     void Start()
     {
@@ -29,10 +26,7 @@ public class playerMove : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        // 不要な有効無効の切り替えは削除
         if (ikManager != null) ikManager.weight = 1f;
-
-        //transform.position = startPosition;
         rb.simulated = true;
     }
 
@@ -43,12 +37,16 @@ public class playerMove : MonoBehaviourPun, IPunObservable
         {
             anim.SetTrigger(trigger);
         }
-        else
-        {
-            Debug.LogWarning($"Animator is null when trying to set trigger: {trigger}");
-        }
     }
 
+    [PunRPC]
+    void SetSneakRPC(bool value)
+    {
+        if (anim != null)
+        {
+            anim.SetBool("isSneaking", value);
+        }
+    }
 
     void Update()
     {
@@ -56,52 +54,77 @@ public class playerMove : MonoBehaviourPun, IPunObservable
 
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
-        if (horizontalInput > 0)
+        // --- スニーク制御（しゃがみ優先）---
+        if (Input.GetKey(KeyCode.S) && isGrounded)
         {
-            photonView.RPC("SetDirectionRPC", RpcTarget.AllBuffered, 1f);
-            if (isGrounded) photonView.RPC("TriggerAnimRPC", RpcTarget.All, "walk");
-        }
-        else if (horizontalInput < 0)
-        {
-            photonView.RPC("SetDirectionRPC", RpcTarget.AllBuffered, -1f);
-            if (isGrounded) photonView.RPC("TriggerAnimRPC", RpcTarget.All, "walk");
+            if (!isSneaking)
+            {
+                isSneaking = true;
+                photonView.RPC("SetSneakRPC", RpcTarget.AllBuffered, true);
+            }
         }
         else
         {
-            if (isGrounded) photonView.RPC("TriggerAnimRPC", RpcTarget.All, "idle");
+            if (isSneaking)
+            {
+                isSneaking = false;
+                photonView.RPC("SetSneakRPC", RpcTarget.AllBuffered, false);
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        // --- 移動処理 ---
+        if (!isSneaking)
         {
-            photonView.RPC("TriggerAnimRPC", RpcTarget.All, "jump");
-            jumpPressed = true;
-            isGrounded = false;
+            if (horizontalInput > 0)
+            {
+                photonView.RPC("SetDirectionRPC", RpcTarget.AllBuffered, 1f);
+                if (isGrounded) photonView.RPC("TriggerAnimRPC", RpcTarget.All, "walk");
+            }
+            else if (horizontalInput < 0)
+            {
+                photonView.RPC("SetDirectionRPC", RpcTarget.AllBuffered, -1f);
+                if (isGrounded) photonView.RPC("TriggerAnimRPC", RpcTarget.All, "walk");
+            }
+            else if (isGrounded)
+            {
+                photonView.RPC("TriggerAnimRPC", RpcTarget.All, "idle");
+            }
+
+            // --- ジャンプ処理（しゃがみ中は不可）---
+            if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+            {
+                photonView.RPC("TriggerAnimRPC", RpcTarget.All, "jump");
+                jumpPressed = true;
+                isGrounded = false;
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && isGrounded)
-        {
-            photonView.RPC("TriggerAnimRPC", RpcTarget.All, "sneak");
-        }
-        else if (Input.GetKeyUp(KeyCode.S) && isGrounded)
-        {
-            photonView.RPC("TriggerAnimRPC", RpcTarget.All, "standUp");
-        }
-        if (Input.GetKeyDown(KeyCode.P) && isGrounded)
-        {
-            photonView.RPC("TriggerAnimRPC", RpcTarget.All, "punch");
-        }
+        // --- 攻撃系 ---
         if (Input.GetKeyDown(KeyCode.K) && isGrounded)
         {
-            photonView.RPC("TriggerAnimRPC", RpcTarget.All, "kick");
+            if (isSneaking)
+                photonView.RPC("TriggerAnimRPC", RpcTarget.All, "kick");
+            else
+                photonView.RPC("TriggerAnimRPC", RpcTarget.All, "punch");
         }
     }
+
 
     void FixedUpdate()
     {
         if (!photonView.IsMine) return;
 
         Vector2 velocity = rb.velocity;
-        velocity.x = horizontalInput * moveSpeed;
+
+        // --- スニーク中は移動停止 ---
+        if (!isSneaking)
+        {
+            velocity.x = horizontalInput * moveSpeed;
+        }
+        else
+        {
+            velocity.x = 0f;
+        }
 
         if (jumpPressed)
         {
@@ -115,11 +138,7 @@ public class playerMove : MonoBehaviourPun, IPunObservable
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!photonView.IsMine) return;
-
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
+        if (collision.gameObject.CompareTag("Ground")) isGrounded = true;
     }
 
     [PunRPC]
@@ -128,17 +147,8 @@ public class playerMove : MonoBehaviourPun, IPunObservable
         transform.localScale = new Vector3(xScale, 1, 1);
     }
 
-    // 予備：同期が必要な場合に備えてスケール補完などを追加したいとき
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        // 今回はRPCだけで同期するので何も書かなくてもOK
+        // 今回はRPCで同期しているため空
     }
-    [PunRPC]
-    public void SetFacingDirection(float direction)
-    {
-        Vector3 scale = transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * Mathf.Sign(direction);
-        transform.localScale = scale;
-    }
-
 }
