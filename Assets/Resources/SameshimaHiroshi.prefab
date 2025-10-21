@@ -1185,6 +1185,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 35
+  isCrouching: 0
+  isAttacking: 0
 --- !u!50 &6485414982952323746
 Rigidbody2D:
   serializedVersion: 4
