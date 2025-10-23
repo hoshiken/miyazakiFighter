@@ -14,6 +14,9 @@ public class playerMove : MonoBehaviourPun, IPunObservable
     private bool jumpPressed = false;
     private bool isSneaking = false;
 
+    // 攻撃中かどうか（PlayerAttackから参照される）
+    [HideInInspector] public bool isAttacking = false;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -31,7 +34,7 @@ public class playerMove : MonoBehaviourPun, IPunObservable
     }
 
     [PunRPC]
-    void TriggerAnimRPC(string trigger)
+    public void TriggerAnimRPC(string trigger)
     {
         if (anim != null)
         {
@@ -72,6 +75,9 @@ public class playerMove : MonoBehaviourPun, IPunObservable
             }
         }
 
+        // --- 攻撃中は移動・ジャンプを無効化 ---
+        if (isAttacking) return;
+
         // --- 移動処理 ---
         if (!isSneaking)
         {
@@ -98,21 +104,12 @@ public class playerMove : MonoBehaviourPun, IPunObservable
                 isGrounded = false;
             }
         }
-
-        // --- 攻撃系 ---
-        if (Input.GetKeyDown(KeyCode.K) && isGrounded)
-        {
-            if (isSneaking)
-                photonView.RPC("TriggerAnimRPC", RpcTarget.All, "kick");
-            else
-                photonView.RPC("TriggerAnimRPC", RpcTarget.All, "punch");
-        }
     }
-
 
     void FixedUpdate()
     {
         if (!photonView.IsMine) return;
+        if (isAttacking) return; // 攻撃中は移動停止
 
         Vector2 velocity = rb.velocity;
 
@@ -149,6 +146,9 @@ public class playerMove : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        // 今回はRPCで同期しているため空
+        // RPCで同期済み
     }
+
+    public bool IsGrounded() => isGrounded;
+    public bool IsSneaking() => isSneaking;
 }
