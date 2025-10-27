@@ -997,6 +997,9 @@ PrefabInstance:
       addedObject: {fileID: 4397409840364909144}
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8761969493894592762}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 6485414982952323746}
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
       insertIndex: -1
@@ -1185,8 +1188,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 35
-  isCrouching: 0
   isAttacking: 0
+--- !u!114 &8761969493894592762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5216897995020594955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e916e80b05103341b3a739a0ec8e202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackPatterns:
+  - name: punch
+    triggers:
+    - punch1
+    - punch2
+    requireSneak: 0
+    requireNoDirection: 1
+    requireHorizontal: 0
+  - name: kick
+    triggers:
+    - kick1
+    requireSneak: 1
+    requireNoDirection: 0
+    requireHorizontal: 0
+  comboResetTime: 0.6
 --- !u!50 &6485414982952323746
 Rigidbody2D:
   serializedVersion: 4
@@ -1298,7 +1327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
   m_UseLocal: 1
 --- !u!4 &6390111728867030888 stripped
 Transform:
@@ -1437,9 +1466,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CategoryHash: 2.2645752e-38
-  m_labelHash: 0.4909894
+  m_labelHash: 8.840178e-23
   m_SpriteKey: 0
-  m_SpriteHash: 320021844
+  m_SpriteHash: 850760722
 --- !u!1 &8903089189996133302 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3751439920631002368, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
@@ -1458,9 +1487,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CategoryHash: 0.0001630366
-  m_labelHash: 0.4909894
+  m_labelHash: 1.2985474e-36
   m_SpriteKey: 0
-  m_SpriteHash: 909777846
+  m_SpriteHash: 42854065
 --- !u!4 &9080781578880988176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5655254004416611674, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
