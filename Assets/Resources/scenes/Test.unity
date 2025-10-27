@@ -488,6 +488,30 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.23101784
       objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[2].name
+      value: charge
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[2].requireSneak
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[2].requireHorizontal
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[2].triggers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: 'attackPatterns.Array.data[2].triggers.Array.data[0]'
+      value: charge
+      objectReference: {fileID: 0}
     - target: {fileID: 8817738535042823821, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: 'm_BoneTransforms.Array.data[0]'
       value: 
