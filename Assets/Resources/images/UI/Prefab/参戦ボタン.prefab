@@ -148,7 +148,6 @@ GameObject:
   - component: {fileID: 740271309374748183}
   - component: {fileID: 4762090842161219086}
   - component: {fileID: 5624935387122208374}
-  - component: {fileID: 2869243649351195031}
   m_Layer: 5
   m_Name: "\u53C2\u6226\u30DC\u30BF\u30F3"
   m_TagString: Untagged
@@ -259,7 +258,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2869243649351195031}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: JoinRoom, Assembly-CSharp
         m_MethodName: OnClickJoinRoom
         m_Mode: 1
@@ -271,20 +270,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2869243649351195031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7164574442369239451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee58f0470975fb34d934fdbfc2057539, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomName: 
-  battleSceneName: CharacterSelect
 --- !u!1 &7776224298984755308
 GameObject:
   m_ObjectHideFlags: 0
