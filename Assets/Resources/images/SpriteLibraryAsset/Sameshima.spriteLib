@@ -119,9 +119,9 @@ MonoBehaviour:
       m_SpriteOverride: {fileID: 3020988277087921132, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
     - m_Name: 4
       m_Hash: 867572536
-      m_Sprite: {fileID: 8136021833526409815, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
+      m_Sprite: {fileID: -6512303203405364884, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
       m_FromMain: 0
-      m_SpriteOverride: {fileID: 8136021833526409815, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
+      m_SpriteOverride: {fileID: -6512303203405364884, guid: ddee3ac59ccd6bd40a9b7db25d6362f4, type: 3}
     m_FromMain: 0
     m_EntryOverrideCount: 4
   - m_Name: R_foot
@@ -157,5 +157,5 @@ MonoBehaviour:
     m_FromMain: 0
     m_EntryOverrideCount: 2
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 638962603828264622
+  m_ModificationHash: 638975268811884323
   m_Version: 1

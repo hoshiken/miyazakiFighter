@@ -46,6 +46,10 @@ MonoBehaviour:
   - SetSneakRPC
   - SyncFlipRPC
   - TriggerComboRPC
+  - DashMoveRPC
+  - OnHitByAttack
+  - PlayGuardAnimRPC
+  - PlayHitAnimRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -428,6 +428,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6485414982952323746, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: m_Mass
+      value: 19.824734
+      objectReference: {fileID: 0}
     - target: {fileID: 6487931524287548413, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.9999972
@@ -476,6 +480,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.117
       objectReference: {fileID: 0}
+    - target: {fileID: 7487398289152159954, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: m_labelHash
+      value: 1.2985474e-36
+      objectReference: {fileID: 0}
     - target: {fileID: 8561608220393900075, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -490,14 +498,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: attackPatterns.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: attackPatterns.Array.data[2].name
       value: charge
       objectReference: {fileID: 0}
     - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[3].name
+      value: birdAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: attackPatterns.Array.data[2].requireSneak
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[3].requireSneak
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
@@ -505,12 +521,28 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[3].requireHorizontal
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[3].requireNoDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: attackPatterns.Array.data[2].triggers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: attackPatterns.Array.data[3].triggers.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: 'attackPatterns.Array.data[2].triggers.Array.data[0]'
       value: charge
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761969493894592762, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
+      propertyPath: 'attackPatterns.Array.data[3].triggers.Array.data[0]'
+      value: bird
       objectReference: {fileID: 0}
     - target: {fileID: 8817738535042823821, guid: 494bb116b07f6994bbb58a61f2598caa, type: 3}
       propertyPath: 'm_BoneTransforms.Array.data[0]'

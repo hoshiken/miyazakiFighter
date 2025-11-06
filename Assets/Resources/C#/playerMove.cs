@@ -13,9 +13,24 @@ public class playerMove : MonoBehaviourPun, IPunObservable
     private float horizontalInput = 0f;
     private bool jumpPressed = false;
     private bool isSneaking = false;
+    public bool IsFacingRight { get; private set; } = true;
 
     // 攻撃中かどうか（PlayerAttackから参照される）
     [HideInInspector] public bool isAttacking = false;
+
+    public HitboxController hitbox; // インスペクターで子を割り当て
+
+    public void ActivateHitbox()
+    {
+        if (hitbox != null)
+            hitbox.ActivateHitbox();
+    }
+
+    public void DeactivateHitbox()
+    {
+        if (hitbox != null)
+            hitbox.DeactivateHitbox();
+    }
 
     void Start()
     {
@@ -31,15 +46,6 @@ public class playerMove : MonoBehaviourPun, IPunObservable
 
         if (ikManager != null) ikManager.weight = 1f;
         rb.simulated = true;
-    }
-
-    [PunRPC]
-    public void TriggerAnimRPC(string trigger)
-    {
-        if (anim != null)
-        {
-            anim.SetTrigger(trigger);
-        }
     }
 
     [PunRPC]
