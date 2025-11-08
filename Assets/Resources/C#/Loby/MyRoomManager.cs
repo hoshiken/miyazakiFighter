@@ -1,49 +1,42 @@
 using Mirror;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class MyRoomManager : NetworkRoomManager
 {
-    [Header("Lobby Counter Reference")]
+    [Header("Optional UI")]
     public LobbyCounter lobbyCounter;
 
-    private const int MaxRooms = 5;
-    private const int RoomCapacity = 2;
+    const int MaxRooms = 5;
+    const int RoomCap  = 2;
 
-    private readonly Dictionary<int, int> connToRoom = new();
+    readonly System.Collections.Generic.Dictionary<int,int> connToRoom = new();
 
     public override void OnRoomServerConnect(NetworkConnectionToClient conn)
     {
         base.OnRoomServerConnect(conn);
-        lobbyCounter.ServerAddTotal(1);
+        lobbyCounter?.ServerAddTotal(+1);
     }
-
     public override void OnRoomServerDisconnect(NetworkConnectionToClient conn)
     {
         base.OnRoomServerDisconnect(conn);
-        lobbyCounter.ServerAddTotal(-1);
+        lobbyCounter?.ServerAddTotal(-1);
 
-        if (connToRoom.TryGetValue(conn.connectionId, out int room))
+        if (connToRoom.TryGetValue(conn.connectionId, out int idx))
         {
-            lobbyCounter.ServerAddRoom(room, -1);
+            lobbyCounter?.ServerAddRoom(idx, -1);
             connToRoom.Remove(conn.connectionId);
         }
     }
 
+    // Roomボタンから呼ばれる
     [Server]
-    public void ServerJoinRoom(NetworkConnectionToClient conn, int index)
+    public bool TryJoinRoom(NetworkConnectionToClient conn, int roomIndex)
     {
-        if (index < 0 || index >= MaxRooms) return;
-        if (lobbyCounter.GetRoomCount(index) >= RoomCapacity)
-        {
-            Debug.Log($"Room {index + 1} is full.");
-            return;
-        }
+        if (roomIndex < 0 || roomIndex >= MaxRooms) return false;
+        if (lobbyCounter != null && lobbyCounter.GetRoomCount(roomIndex) >= RoomCap) return false;
 
-        lobbyCounter.ServerAddRoom(index, 1);
-        connToRoom[conn.connectionId] = index;
-
-        // ★ここでNetworkBehaviour経由でRPCを実行
-        LobbyNetworkActions.Instance.TargetGoCharacterSelect(conn);
+        lobbyCounter?.ServerAddRoom(roomIndex, +1);
+        connToRoom[conn.connectionId] = roomIndex;
+        return true;
     }
 }
