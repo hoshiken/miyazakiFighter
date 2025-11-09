@@ -12,14 +12,14 @@
     "InvokeRenderInBatchMode": true,
     "NetworkIdIsObjectName": false,
     "HideNetworkObjectInactivityGuard": false,
-    "AllowClientServerModesInWebGL": false,
+    "AllowClientServerModesInWebGL": true,
     "ClientsRecordFrameAndPacketTimingTraces": false,
     "Simulation": {
         "InputDataWordCount": 0,
         "ReplicationFeatures": 1,
         "InputTransferMode": 0,
         "SimulationUpdateTimeMode": 0,
-        "PlayerCount": 10,
+        "PlayerCount": 20,
         "TickRateSelection": {
             "Client": 64,
             "ServerIndex": 0,
@@ -31,7 +31,7 @@
         "EnableAdaptivePacketFragmentation": false
     },
     "Network": {
-        "ConnectionTimeout": 10.0,
+        "ConnectionTimeout": 20.0,
         "ConnectionShutdownTime": 1.0,
         "ReliableDataTransferModes": 3
     },
