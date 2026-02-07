@@ -156,7 +156,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FightRoom_0: 967394022722889188
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
